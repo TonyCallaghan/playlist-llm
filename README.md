@@ -1,6 +1,9 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Playlist-LLM
 
-## Getting Started
+- This README file will be edited before submission.
+- Some instructions below (Taken from Ostanify project 😉)
+- [Next.js](https://nextjs.org) project using TypeScript + React.
+- Getting Started:
 
 First, run the development server:
 
@@ -16,21 +19,87 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- You can start editing the page by starting at `src/pages/index.tsx`.
+- We have a single web page for now based the lo-fi wireframe in the 
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## Setup Intructions  (This will be removed before submission)
+Install Git:
+- [Download here](https://git-scm.com/downloads).
 
-To learn more about Next.js, take a look at the following resources:
+<hr>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Example of global setup: (just do once)
+- `git config --global user.name "your github username"`
+- `git config --global user.email "your.email@whatever.ie"`
+<hr>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Downloading the project to your machine:
+- `git clone`
+- `cd playlist-llm`
+<hr>
 
-## Deploy on Vercel
+#### Making Changes: (**DO NOT MERGE TO MAIN!!!!!!!!**)
+- Create a new branch whenever you are making changes:
+- `git checkout -b feature/my-new-feature`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+<hr>
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Adding your changes:
+- `git add README.md`
+- `git commit -m "Title of the changes I did..."`
+- `git push -u origin feature/my-new-feature`
+- `git push` (after)
+
+<hr>
+
+#### Pull requests:
+- Create a pull request on github and **please document the changes that you have made**.
+- Just fill out the key details:
+    - Context (is it related to Frontend/BE/DB/Documentation etc...)
+    - What you changed / implemented?
+    - Correct labels
+    - Screenshots(if neccessary)
+    - Approvals (TBD)
+<hr>
+
+##### Approvals:
+- TBD
+
+## Running the project (Option 1: NodeJS)
+
+Clone down this repository. You will need `node` and `npm` installed globally on your machine.  
+
+Installation:
+
+`npm install`  
+
+To Run Test Suite:  
+
+`npm test`  
+
+To Start Server:
+
+`npm start`  
+
+To Visit App:
+
+`localhost:3000`
+
+## Running the project (Option 2: Docker Container)
+
+Clone down this repository. You will need `Docker` installed and running on your machine.
+
+Create the image from root directory:
+
+`docker build -t playlist-llm .`
+
+Run the Docker container:
+
+`docker run -d -p 3000:80 playlist-llm`
+
+To Visit App:
+
+`localhost:3000`
+
+
