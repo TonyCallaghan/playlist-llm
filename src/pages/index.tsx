@@ -7,17 +7,17 @@ import ResultOptions from '../components/ResultOptions';
 import ResultGrid from '../components/ResultGrid';
 
 const Home: React.FC = () => (
-  <>
-    <Head>
-      <title>Playlist LLM</title>
-      <meta name="description" content="Generate playlists using AI" />
-    </Head>
-    <Header />
-    <Tabs />
-    <InputFields />
-    <ResultOptions />
-    <ResultGrid />
-  </>
+    <>
+        <Head>
+            <title>Playlist LLM</title>
+            <meta name="description" content="Generate playlists using AI" />
+        </Head>
+        <Header />
+        <Tabs />
+        <InputFields />
+        <ResultOptions />
+        <ResultGrid />
+    </>
 );
 
 export default Home;
