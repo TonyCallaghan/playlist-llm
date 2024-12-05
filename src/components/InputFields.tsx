@@ -27,7 +27,6 @@ const InputFields: React.FC = () => {
             console.log('Raw songs data:', data.songs);
             // Format the songs to extract song title and artist
             try {
-                // Step 1: Clean up the raw string data
                 const cleanedData = data.songs
                     .join('\n') // Join lines into a single string
                     .replace(/```json|```/g, '') // Remove Markdown code block indicators
@@ -35,10 +34,8 @@ const InputFields: React.FC = () => {
 
                 console.log('Cleaned songs data:', cleanedData);
 
-                // Step 2: Parse the cleaned JSON string
                 const parsedData = JSON.parse(cleanedData);
 
-                // Step 3: Extract and format the playlist
                 const formattedSongs = parsedData.playlist.map((item: any) => ({
                     song: item.song,
                     artist: item.artist,
