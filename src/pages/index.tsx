@@ -16,7 +16,7 @@ const Home: React.FC = () => (
         <Tabs />
         <InputFields />
         <ResultOptions />
-        <ResultGrid />
+        <ResultGrid results={[]} />
     </>
 );
 
