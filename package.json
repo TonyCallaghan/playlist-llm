@@ -8,9 +8,9 @@
         "start": "next start",
         "deploy": "firebase deploy",
         "prepare": "npm run format && npm run lint && npm run test",
-        "lint": "",
+        "lint": "next lint",
         "format": "prettier --write .",
-        "test": ""
+        "test": "jest --config jest/jest.config.ts"
     },
     "dependencies": {
         "cors": "^2.8.5",

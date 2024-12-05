@@ -1,13 +1,14 @@
-
-const searchSpotifyTracks = async (playlist: { song: string; artist: string }[]) => {
-
+const searchSpotifyTracks = async (
+    playlist: { song: string; artist: string }[],
+) => {
     const token = localStorage.getItem('spotifyAuthToken');
     const userId = localStorage.getItem('spotifyUserId');
 
     const playlistID = await createSpotifyPlaylist(token!, userId!);
-    
+
     const trackUris: string[] = [];
-    const trackDetails: { song: string; artist: string; imageUrl: string }[] = [];
+    const trackDetails: { song: string; artist: string; imageUrl: string }[] =
+        [];
 
     for (const item of playlist) {
         const { song, artist } = item;
@@ -32,78 +33,90 @@ const searchSpotifyTracks = async (playlist: { song: string; artist: string }[])
 
                 const trackName = track.name;
                 const artistName = track.artists[0].name;
-                const imageUrl = track.album.images?.[0]?.url
+                const imageUrl = track.album.images?.[0]?.url;
 
-                trackDetails.push({ song: trackName, artist: artistName, imageUrl });
+                trackDetails.push({
+                    song: trackName,
+                    artist: artistName,
+                    imageUrl,
+                });
 
-
-
-                console.log(`Found track: ${track.name} by ${track.artists[0].name}`);
-            } 
+                console.log(
+                    `Found track: ${track.name} by ${track.artists[0].name}`,
+                );
+            }
         } catch (error) {
-            console.error(`Error searching for "${song}" by "${artist}":`, error);
+            console.error(
+                `Error searching for "${song}" by "${artist}":`,
+                error,
+            );
         }
     }
     await addTracksToPlaylist(token!, playlistID, trackUris);
     return trackDetails;
-}
+};
 
 //Creates Playlist and returns PlaylistID
-const createSpotifyPlaylist = async(token: string, userId: string) => {
+const createSpotifyPlaylist = async (token: string, userId: string) => {
     const endpoint = `https://api.spotify.com/v1/users/${userId}/playlists`;
 
     const body = {
-        name: "PlaylistLLM",
+        name: 'PlaylistLLM',
         public: true,
     };
 
     try {
         const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(body),
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
         });
 
         if (!response.ok) {
             throw new Error(`Error creating playlist: ${response.statusText}`);
-          }
-      
-          const data = await response.json();
-          console.log(data.id);
-          return data.id;
-        } catch (error) {
-          console.error('Error creating playlist:', error);
-          return null;
         }
-      };
 
+        const data = await response.json();
+        console.log(data.id);
+        return data.id;
+    } catch (error) {
+        console.error('Error creating playlist:', error);
+        return null;
+    }
+};
 
-      const addTracksToPlaylist = async (token: string, playlistId: string, trackUris: string[]) => {
-        const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
-      
-        try {
-          const response = await fetch(endpoint, {
+const addTracksToPlaylist = async (
+    token: string,
+    playlistId: string,
+    trackUris: string[],
+) => {
+    const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
+
+    try {
+        const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              uris: trackUris,  // Array of track URIs
+                uris: trackUris, // Array of track URIs
             }),
-          });
-      
-          if (!response.ok) {
-            throw new Error(`Error adding tracks to playlist: ${response.statusText}`);
-          }
-      
-          console.log('Tracks added successfully!');
-        } catch (error) {
-          console.error('Error adding tracks:', error);
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `Error adding tracks to playlist: ${response.statusText}`,
+            );
         }
-      };
-      
-export default searchSpotifyTracks
+
+        console.log('Tracks added successfully!');
+    } catch (error) {
+        console.error('Error adding tracks:', error);
+    }
+};
+
+export default searchSpotifyTracks;
