@@ -13,7 +13,7 @@ const InputFields: React.FC = () => {
         const redirectUri = 'http://localhost:3000/callback'; //This will need to be changed when live
         const scopes = ['user-read-private', 'playlist-modify-public'];
         const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientID}&scope=${encodeURIComponent(scopes.join(' '))}&redirect_uri=${encodeURIComponent(redirectUri)}`;
-        window.location.href = authUrl;
+        window.open(authUrl, '_blank', 'width=500,height=500');
     };
 
     const handleSubmit = async () => {

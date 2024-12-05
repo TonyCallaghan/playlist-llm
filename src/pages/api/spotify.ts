@@ -5,6 +5,13 @@ const searchSpotifyTracks = async (
     const userId = localStorage.getItem('spotifyUserId');
 
     const playlistID = await createSpotifyPlaylist(token!, userId!);
+    const playlistIDString = String(playlistID);
+
+    localStorage.setItem('SpotifyPlaylistId', playlistIDString);
+    console.log(
+        'Stored Playlist ID:',
+        localStorage.getItem('SpotifyPlaylistId'),
+    );
 
     const trackUris: string[] = [];
     const trackDetails: { song: string; artist: string; imageUrl: string }[] =

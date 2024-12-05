@@ -2,28 +2,39 @@ import React, { useEffect } from 'react';
 
 const Callback: React.FC = () => {
     useEffect(() => {
-        const hash = window.location.hash;
-        const params = new URLSearchParams(hash.substring(1));
-        const accessToken = params.get('access_token');
-        const expiresIn = params.get('expires_in');
+        const authenticateUser = async () => {
+            const hash = window.location.hash;
+            const params = new URLSearchParams(hash.substring(1));
+            const accessToken = params.get('access_token');
+            const expiresIn = params.get('expires_in');
 
-        if (accessToken && expiresIn) {
-            const expirationTime = Date.now() + parseInt(expiresIn) * 1000;
-            localStorage.setItem('spotifyAuthToken', accessToken);
-            localStorage.setItem(
-                'spotifyTokenExpiration',
-                expirationTime.toString(),
-            );
-            console.log('Spotify Access Token:', accessToken);
+            if (accessToken && expiresIn) {
+                const expirationTime = Date.now() + parseInt(expiresIn) * 1000;
+                localStorage.setItem('spotifyAuthToken', accessToken);
+                localStorage.setItem(
+                    'spotifyTokenExpiration',
+                    expirationTime.toString(),
+                );
+                console.log('Spotify Access Token:', accessToken);
 
-            getUserId(accessToken).then(userId => {
-                localStorage.setItem('spotifyUserId', userId);
-            });
+                // Wait for the user ID to be fetched before closing the window
+                const userId = await getUserId(accessToken);
+                if (userId) {
+                    localStorage.setItem('spotifyUserId', userId);
+                    console.log('User ID:', userId);
 
-            window.location.href = '/';
-        } else {
-            console.error('Token or expiry time was not found in the URL');
-        }
+                    // Close the window after the user is authenticated
+                    window.close();
+                } else {
+                    console.error('Failed to fetch user ID');
+                }
+            } else {
+                console.error('Token or expiry time was not found in the URL');
+            }
+        };
+
+        // Call the authentication function
+        authenticateUser();
     }, []);
 
     return <p>Authenticating User</p>;

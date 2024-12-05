@@ -2,13 +2,23 @@ import React from 'react';
 
 const ResultOptions: React.FC = () => {
     const handleResetTokens = () => {
-        //This is purely for testing, will remove later
+        // This is purely for testing, will remove later
         console.log(
             'Spotify AuthToken: ' + localStorage.getItem('spotifyAuthToken'),
         );
         localStorage.removeItem('spotifyAuthToken');
         localStorage.removeItem('spotifyTokenExpiration');
         console.log('Tokens have been reset!!');
+    };
+
+    const openPlaylist = () => {
+        const playlistID = localStorage.getItem('SpotifyPlaylistId');
+        console.log('Retrieved Playlist ID:', playlistID);
+
+        if (playlistID) {
+            const spotifyLink = `https://open.spotify.com/playlist/${encodeURIComponent(playlistID)}`;
+            window.open(spotifyLink, '_blank');
+        }
     };
 
     return (
@@ -21,11 +31,15 @@ const ResultOptions: React.FC = () => {
                 >
                     Reset Tokens
                 </button>
-                <button className="bg-green-600 text-white px-6 py-2 rounded">
+                <button
+                    onClick={openPlaylist}
+                    className="bg-green-600 text-white px-6 py-2 rounded"
+                >
                     Open on Spotify
                 </button>
             </div>
         </div>
     );
 };
+
 export default ResultOptions;
