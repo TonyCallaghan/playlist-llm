@@ -23,7 +23,7 @@ export default async function handler(
 
     try {
         const response = await openai.chat.completions.create({
-            model: 'gpt-4o',
+            model: 'gpt-4',
             messages: [
                 {
                     role: 'user',
@@ -37,7 +37,7 @@ export default async function handler(
                     1. ${artist1}
                     2. ${artist2}
                     
-                    Provide 10 songs. 
+                    Provide 20 songs. 
                     
                     For each song, include:
                     - The song's name

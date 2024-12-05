@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import ResultsGrid from './ResultGrid';
 
 const InputFields: React.FC = () => {
     const [artist1, setArtist1] = useState('');
     const [artist2, setArtist2] = useState('');
-    const [songs, setSongs] = useState<string[]>([]);
+    const [songs, setSongs] = useState<{ song: string; artist: string }[]>([]);
     const [error, setError] = useState('');
 
     const handleSubmit = async () => {
@@ -23,7 +24,28 @@ const InputFields: React.FC = () => {
             }
 
             const data = await response.json();
-            setSongs(data.songs || []);
+            console.log('Raw songs data:', data.songs);
+            // Format the songs to extract song title and artist
+            try {
+                const cleanedData = data.songs
+                    .join('\n') // Join lines into a single string
+                    .replace(/```json|```/g, '') // Remove Markdown code block indicators
+                    .trim(); // Remove any leading or trailing whitespace
+
+                console.log('Cleaned songs data:', cleanedData);
+
+                const parsedData = JSON.parse(cleanedData);
+
+                const formattedSongs = parsedData.playlist.map((item: any) => ({
+                    song: item.song,
+                    artist: item.artist,
+                }));
+
+                setSongs(formattedSongs || []);
+            } catch (err) {
+                console.error('Failed to parse songs:', err);
+                setError('Failed to format the song data. Please try again.');
+            }
         } catch (err: any) {
             console.error('Error:', err);
             setError(err.message);
@@ -57,11 +79,8 @@ const InputFields: React.FC = () => {
 
             {error && <div className="text-red-500 mt-4">{error}</div>}
 
-            <ul className="list-disc mt-4">
-                {songs.map((song, index) => (
-                    <li key={index}>{song}</li>
-                ))}
-            </ul>
+            {/* Pass the songs array to ResultsGrid */}
+            <ResultsGrid results={songs} />
         </div>
     );
 };
