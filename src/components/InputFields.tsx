@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import callback from '@/pages/callback';
+import searchSpotifyTracks from '@/pages/api/spotify'
+
 
 const InputFields: React.FC = () => {
     const [artist1, setArtist1] = useState('');
     const [artist2, setArtist2] = useState('');
     const [songs, setSongs] = useState<string[]>([]);
     const [error, setError] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     const handleLogin = async () => {
         const clientID = '2e998fe1e57848b8a0a003bbe111595a'; //remove!
@@ -42,14 +42,26 @@ const InputFields: React.FC = () => {
     };
 
     const handleClick = () => {
+
         const currentTime = Date.now();
         const tokenExpiration = localStorage.getItem('spotifyTokenExpiration');
+        const token = localStorage.getItem('spotifyAuthToken');
 
-        if (tokenExpiration === null || currentTime >= parseInt(tokenExpiration)) { //Expired or no token
+        if (!token || !tokenExpiration || currentTime >= parseInt(tokenExpiration)) { //Expired or no token
             handleLogin();
-        
+            
         } else {
-            handleSubmit(); //GPT API
+                       // Create the playlist array
+                       const response = {
+                        playlist: [
+                            { song: "Shape of You", artist: "Ed Sheeran" },
+                            { song: "Blinding Lights", artist: "The Weeknd" },
+                            { song: "Bad Guy", artist: "Billie Eilish" }
+                        ]
+                    };
+              searchSpotifyTracks(response.playlist);
+           // handleSubmit(); //GPT API
+            
         }
       };
 
