@@ -1,86 +1,87 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
 
 jobs:
-  test:
-    name: Test and Lint
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    test:
+        name: Test and Lint
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '21'
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
 
-      - name: Install dependencies
-        run: npm install
+            - name: Install dependencies
+              run: npm install
 
-      - name: Run linter
-        run: npm run lint
+            - name: Run linter
+              run: npm run lint
 
-      - name: Run tests
-        run: npm test
+            - name: Run tests
+              run: npm test
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        needs: test
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '21'
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '21'
 
-      - name: Install dependencies
-        run: npm install
+            - name: Install dependencies
+              run: npm install
 
-      - name: Build the application
-        run: npm run build
+            - name: Build the application
+              run: npm run build
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: out
-          retention-days: 7
-          if-no-files-found: error
+            # Temporarily disabled because we are not ready for deployment yet
+            # - name: Upload build artifacts
+            #   uses: actions/upload-artifact@v4
+            #   with:
+            #       name: build-artifacts
+            #       path: out
+            #       retention-days: 7
+            #       if-no-files-found: error
 
-  deploy:
-    name: Deploy
-    runs-on: ubuntu-latest
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    # deploy:
+    #     name: Deploy
+    #     runs-on: ubuntu-latest
+    #     needs: build
+    #     if: github.ref == 'refs/heads/main'
+    #     steps:
+    #         - name: Checkout code
+    #           uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '21'
+    #         - name: Set up Node.js
+    #           uses: actions/setup-node@v4
+    #           with:
+    #               node-version: '21'
 
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: out
+    #         - name: Download build artifacts
+    #           uses: actions/download-artifact@v4
+    #           with:
+    #               name: build-artifacts
+    #               path: out
 
-      - name: Install Firebase CLI
-        run: npm install -g firebase-tools
+    #         - name: Install Firebase CLI
+    #           run: npm install -g firebase-tools
 
-      - name: Deploy to Firebase
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        run: firebase deploy --only hosting
+    #         - name: Deploy to Firebase
+    #           env:
+    #               FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+    #           run: firebase deploy --only hosting

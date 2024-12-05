@@ -27,7 +27,9 @@
         "**/*.ts",
         "**/*.tsx",
         ".next/types/**/*.ts",
-        "jest/jest.config.tsig.ts"
+        "jest/jest.config.tsig.ts",
+        "src/**/*",
+        "utils/**/*"
     ],
     "exclude": ["node_modules"]
 }

@@ -13,7 +13,11 @@
         "test": "jest --config jest/jest.config.ts"
     },
     "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.21.1",
         "next": "^15.0.2",
+        "openai": "^4.72.0",
         "playlist-llm": "file:",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
@@ -26,8 +30,10 @@
         "@testing-library/dom": "^10.4.0",
         "@testing-library/jest-dom": "^6.6.3",
         "@testing-library/react": "^16.0.1",
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
         "@types/jest": "^29.5.14",
-        "@types/node": "^20",
+        "@types/node": "^20.17.6",
         "@types/react": "^18",
         "@types/react-dom": "^18",
         "@typescript-eslint/eslint-plugin": "^8.12.2",
@@ -46,5 +52,10 @@
         "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
         "typescript": "^5"
-    }
+    },
+    "description": "-   This README file will be edited before submission. -   Some instructions below (Taken from Ostanify project 😉) -   [Next.js](https://nextjs.org) project using TypeScript + React. -   Getting Started:",
+    "main": "postcss.config.js",
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
