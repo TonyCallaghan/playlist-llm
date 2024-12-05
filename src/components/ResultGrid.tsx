@@ -21,7 +21,7 @@ const ResultsGrid: React.FC = () => {
                                 src={item.imageUrl}
                                 alt={item.song}
                                 className="w-full h-32 object-cover rounded"
-                                width={50} 
+                                width={50}
                                 height={50}
                             />
                             <h3 className="mt-2 truncate">{item.song}</h3>

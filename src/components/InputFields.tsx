@@ -17,7 +17,9 @@ const InputFields: React.FC = () => {
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to fetch recommendations');
+                throw new Error(
+                    errorData.error || 'Failed to fetch recommendations',
+                );
             }
 
             const data = await response.json();
@@ -34,14 +36,14 @@ const InputFields: React.FC = () => {
                 <input
                     type="text"
                     value={artist1}
-                    onChange={(e) => setArtist1(e.target.value)}
+                    onChange={e => setArtist1(e.target.value)}
                     placeholder="Kanye West"
                     className="border rounded px-4 py-2 w-full max-w-xs"
                 />
                 <input
                     type="text"
                     value={artist2}
-                    onChange={(e) => setArtist2(e.target.value)}
+                    onChange={e => setArtist2(e.target.value)}
                     placeholder="Taylor Swift"
                     className="border rounded px-4 py-2 w-full max-w-xs"
                 />

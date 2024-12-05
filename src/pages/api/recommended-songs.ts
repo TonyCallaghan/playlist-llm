@@ -5,7 +5,10 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
 });
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+    req: NextApiRequest,
+    res: NextApiResponse,
+) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
@@ -13,7 +16,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { artist1, artist2 } = req.body;
 
     if (!artist1 || !artist2) {
-        return res.status(400).json({ error: 'Both artist1 and artist2 are required.' });
+        return res
+            .status(400)
+            .json({ error: 'Both artist1 and artist2 are required.' });
     }
 
     try {
@@ -52,18 +57,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             ],
             max_tokens: 1000,
             temperature: 0.1,
-            top_p: 0.1
+            top_p: 0.1,
         });
 
         console.log('OpenAI Response:', response);
 
         const songs = response.choices[0]?.message?.content?.split('\n');
-        
+
         console.log('OpenAI Actual Response*******************:', songs);
 
         res.status(200).json({ songs });
     } catch (error: any) {
         console.error('Error calling OpenAI API:', error);
-        res.status(500).json({ error: 'Failed to generate song recommendations.' });
+        res.status(500).json({
+            error: 'Failed to generate song recommendations.',
+        });
     }
 }
