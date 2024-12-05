@@ -61,7 +61,7 @@ const InputFields: React.FC = () => {
                 ],
             };
             searchSpotifyTracks(response.playlist);
-            // handleSubmit(); //GPT API
+            handleSubmit(); //GPT API
         }
     };
 
