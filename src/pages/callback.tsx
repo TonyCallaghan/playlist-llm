@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const callback: React.FC = () => {
+const Callback: React.FC = () => {
     useEffect(() => {
         const hash = window.location.hash;
         const params = new URLSearchParams(hash.substring(1));
@@ -53,4 +53,4 @@ const getUserId = async (token: string) => {
     }
 };
 
-export default callback;
+export default Callback;
