@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import ResultsGrid from './ResultGrid';
 
-const InputFields: React.FC = () => {
-    const [artist1, setArtist1] = useState('');
-    const [artist2, setArtist2] = useState('');
+interface InputFieldsProps {
+    activeTab: string;
+}
+
+const InputFields: React.FC<InputFieldsProps> = ({ activeTab }) => {
+    const [input1, setInput1] = useState('');
+    const [input2, setInput2] = useState('');
     const [songs, setSongs] = useState<{ song: string; artist: string }[]>([]);
     const [error, setError] = useState('');
 
@@ -13,7 +17,7 @@ const InputFields: React.FC = () => {
             const response = await fetch('/api/recommended-songs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ artist1, artist2 }),
+                body: JSON.stringify({ type: activeTab, input1, input2 }),
             });
 
             if (!response.ok) {
@@ -57,16 +61,32 @@ const InputFields: React.FC = () => {
             <div className="flex space-x-4">
                 <input
                     type="text"
-                    value={artist1}
-                    onChange={e => setArtist1(e.target.value)}
-                    placeholder="Kanye West"
+                    value={input1}
+                    onChange={e => setInput1(e.target.value)}
+                    placeholder={
+                        activeTab === 'Artist to Artist'
+                        ? 'Artist 1'
+                        : activeTab === 'Song to Song'
+                        ? 'Song 1'
+                        : activeTab === 'Based on Mood'
+                        ? 'Mood 1 (e.g., Relaxing)'
+                        : 'Genre (e.g., Pop)'
+                    }
                     className="border rounded px-4 py-2 w-full max-w-xs"
                 />
                 <input
                     type="text"
-                    value={artist2}
-                    onChange={e => setArtist2(e.target.value)}
-                    placeholder="Taylor Swift"
+                    value={input2}
+                    onChange={e => setInput2(e.target.value)}
+                    placeholder={
+                        activeTab === 'Artist to Artist'
+                        ? 'Artist 2' 
+                        : activeTab === 'Song to Song'
+                        ? 'Song 2' 
+                        : activeTab === 'Based on Mood'
+                        ? 'Mood 2 (e.g., Stressed)' 
+                        : 'Instrument (e.g, violin)'
+                    }
                     className="border rounded px-4 py-2 w-full max-w-xs"
                 />
             </div>
