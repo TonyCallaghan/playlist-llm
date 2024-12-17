@@ -5,12 +5,18 @@ const tabOptions = [
     'Song to Song',
     'Based on Mood',
     'Genre | Instrument',
-    'Genre | BPM',
 ];
 
-const Tabs: React.FC = () => {
-    const [activeTab, setActiveTab] = useState(tabOptions[0]);
+interface TabsProps {
+    setActiveTab: (tab: string) => void;
+}
 
+const Tabs: React.FC<TabsProps> = ({ setActiveTab }) => {
+    const [activeTab, setTab] = useState(tabOptions[0]);
+    const handleTabClick = (tab: string) => {
+        setTab(tab);
+        setActiveTab(tab);
+    };
     return (
         <div className="flex justify-center space-x-2 overflow-auto">
             {tabOptions.map(tab => (
@@ -21,7 +27,7 @@ const Tabs: React.FC = () => {
                             ? 'bg-blue-500 text-white'
                             : 'bg-gray-200 text-gray-700'
                     }`}
-                    onClick={() => setActiveTab(tab)}
+                    onClick={() => handleTabClick(tab)}
                 >
                     {tab}
                 </button>
