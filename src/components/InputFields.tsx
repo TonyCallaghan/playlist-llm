@@ -9,7 +9,7 @@ const InputFields: React.FC = () => {
     const [error, setError] = useState('');
 
     const handleLogin = async () => {
-        const clientID = '2e998fe1e57848b8a0a003bbe111595a'; //remove!
+        const clientID = process.env.CLIENT_ID;
         const redirectUri = 'http://localhost:3000/callback'; //This will need to be changed when live
         const scopes = ['user-read-private', 'playlist-modify-public'];
         const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientID}&scope=${encodeURIComponent(scopes.join(' '))}&redirect_uri=${encodeURIComponent(redirectUri)}`;
