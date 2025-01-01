@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import searchSpotifyTracks from '@/pages/api/spotify';
 import ResultsGrid from './ResultGrid';
 
 const InputFields: React.FC = () => {
@@ -6,6 +7,14 @@ const InputFields: React.FC = () => {
     const [artist2, setArtist2] = useState('');
     const [songs, setSongs] = useState<{ song: string; artist: string }[]>([]);
     const [error, setError] = useState('');
+
+    const handleLogin = async () => {
+        const clientID = process.env.CLIENT_ID;
+        const redirectUri = 'http://localhost:3000/callback'; //This will need to be changed when live
+        const scopes = ['user-read-private', 'playlist-modify-public'];
+        const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientID}&scope=${encodeURIComponent(scopes.join(' '))}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+        window.open(authUrl, '_blank', 'width=500,height=500');
+    };
 
     const handleSubmit = async () => {
         setError('');
@@ -52,6 +61,32 @@ const InputFields: React.FC = () => {
         }
     };
 
+    const handleClick = () => {
+        const currentTime = Date.now();
+        const tokenExpiration = localStorage.getItem('spotifyTokenExpiration');
+        const token = localStorage.getItem('spotifyAuthToken');
+
+        if (
+            !token ||
+            !tokenExpiration ||
+            currentTime >= parseInt(tokenExpiration)
+        ) {
+            //Expired or no token
+            handleLogin();
+        } else {
+            // Create the playlist array
+            const response = {
+                playlist: [
+                    { song: 'Shape of You', artist: 'Ed Sheeran' },
+                    { song: 'Blinding Lights', artist: 'The Weeknd' },
+                    { song: 'Bad Guy', artist: 'Billie Eilish' },
+                ],
+            };
+            searchSpotifyTracks(response.playlist);
+            handleSubmit(); //GPT API
+        }
+    };
+
     return (
         <div className="flex flex-col items-center space-y-4 mt-6">
             <div className="flex space-x-4">
@@ -71,7 +106,7 @@ const InputFields: React.FC = () => {
                 />
             </div>
             <button
-                onClick={handleSubmit}
+                onClick={handleClick}
                 className="bg-blue-500 text-white px-4 py-2 rounded"
             >
                 Send
