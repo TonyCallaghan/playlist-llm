@@ -1,3 +1,5 @@
+// components/ResultOptions.tsx
+
 import React from 'react';
 
 const ResultOptions: React.FC = () => {
@@ -8,7 +10,8 @@ const ResultOptions: React.FC = () => {
         );
         localStorage.removeItem('spotifyAuthToken');
         localStorage.removeItem('spotifyTokenExpiration');
-        console.log('Tokens have been reset!!');
+        localStorage.removeItem('SpotifyPlaylistId'); // Remove playlist ID as well
+        console.log('Tokens and Playlist ID have been reset!!');
     };
 
     const openPlaylist = () => {
@@ -18,6 +21,8 @@ const ResultOptions: React.FC = () => {
         if (playlistID) {
             const spotifyLink = `https://open.spotify.com/playlist/${encodeURIComponent(playlistID)}`;
             window.open(spotifyLink, '_blank');
+        } else {
+            alert('No playlist found. Please create a playlist first.');
         }
     };
 
