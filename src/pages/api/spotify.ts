@@ -26,7 +26,7 @@ interface SpotifyRequestBody {
 const createSpotifyPlaylist = async (
     token: string,
     userId: string,
-    playlistName: string = 'PlaylistLLM'
+    playlistName: string = 'PlaylistLLM',
 ): Promise<string | null> => {
     const endpoint = `https://api.spotify.com/v1/users/${userId}/playlists`;
 
@@ -66,7 +66,7 @@ const createSpotifyPlaylist = async (
  */
 const searchSpotifyTracks = async (
     playlist: Song[],
-    token: string
+    token: string,
 ): Promise<{ trackUris: string[]; trackDetails: Song[] }> => {
     const trackUris: string[] = [];
     const trackDetails: Song[] = [];
@@ -102,12 +102,17 @@ const searchSpotifyTracks = async (
                     imageUrl,
                 });
 
-                console.log(`Found track: ${track.name} by ${track.artists[0].name}`);
+                console.log(
+                    `Found track: ${track.name} by ${track.artists[0].name}`,
+                );
             } else {
                 console.warn(`No track found for "${song}" by "${artist}".`);
             }
         } catch (error) {
-            console.error(`Error searching for "${song}" by "${artist}":`, error);
+            console.error(
+                `Error searching for "${song}" by "${artist}":`,
+                error,
+            );
         }
     }
 
@@ -123,7 +128,7 @@ const searchSpotifyTracks = async (
 const addTracksToPlaylist = async (
     token: string,
     playlistId: string,
-    trackUris: string[]
+    trackUris: string[],
 ) => {
     const endpoint = `https://api.spotify.com/v1/playlists/${playlistId}/tracks`;
 
@@ -140,7 +145,9 @@ const addTracksToPlaylist = async (
         });
 
         if (!response.ok) {
-            throw new Error(`Error adding tracks to playlist: ${response.statusText}`);
+            throw new Error(
+                `Error adding tracks to playlist: ${response.statusText}`,
+            );
         }
 
         console.log('Tracks added successfully!');
@@ -155,7 +162,7 @@ const addTracksToPlaylist = async (
  */
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse,
 ) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
@@ -164,7 +171,9 @@ export default async function handler(
     const { playlist, token, userId } = req.body as SpotifyRequestBody;
 
     if (!playlist || !token || !userId) {
-        return res.status(400).json({ error: 'Playlist, token, and userId are required.' });
+        return res
+            .status(400)
+            .json({ error: 'Playlist, token, and userId are required.' });
     }
 
     try {
@@ -176,7 +185,10 @@ export default async function handler(
         }
 
         // Step 2: Search for Tracks on Spotify
-        const { trackUris, trackDetails } = await searchSpotifyTracks(playlist, token);
+        const { trackUris, trackDetails } = await searchSpotifyTracks(
+            playlist,
+            token,
+        );
 
         if (trackUris.length === 0) {
             throw new Error('No tracks found to add to the playlist.');
@@ -189,6 +201,8 @@ export default async function handler(
         res.status(200).json({ playlistId, tracks: trackDetails });
     } catch (error: any) {
         console.error('Error in spotify.ts:', error);
-        res.status(500).json({ error: error.message || 'Failed to process Spotify playlist.' });
+        res.status(500).json({
+            error: error.message || 'Failed to process Spotify playlist.',
+        });
     }
 }

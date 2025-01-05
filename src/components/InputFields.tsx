@@ -1,18 +1,26 @@
-// components/InputFields.tsx
-
 import React, { useState } from 'react';
 import ResultsGrid from './ResultGrid';
-import ResultOptions from './ResultOptions'; // Ensure you import ResultOptions
+import ResultOptions from './ResultOptions';
+import '../styles/InputFields.css';
 
 const InputFields: React.FC = () => {
+    const [activeTab, setActiveTab] = useState('Mood'); // Default tab is 'Mood'
     const [artist1, setArtist1] = useState('');
     const [artist2, setArtist2] = useState('');
-    const [songs, setSongs] = useState<{ song: string; artist: string; imageUrl?: string }[]>([]);
+    const [mood, setMood] = useState('');
+    const [genre, setGenre] = useState('');
+    const [instrument, setInstrument] = useState('');
+    const [bpm, setBpm] = useState('low');
+    const [songs, setSongs] = useState<
+        { song: string; artist: string; imageUrl?: string }[]
+    >([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const handleLogin = async () => {
-        const clientID = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID || '2e998fe1e57848b8a0a003bbe111595a'; // Secure this
+        const clientID =
+            process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID ||
+            '2e998fe1e57848b8a0a003bbe111595a'; // Secure this
         const redirectUri = 'http://localhost:3000/callback'; // Update for production
         const scopes = ['user-read-private', 'playlist-modify-public'];
         const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientID}&scope=${encodeURIComponent(scopes.join(' '))}&redirect_uri=${encodeURIComponent(redirectUri)}`;
@@ -33,12 +41,23 @@ const InputFields: React.FC = () => {
             const response = await fetch('/api/recommended-songs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ artist1, artist2, token, userId }),
+                body: JSON.stringify({
+                    artist1,
+                    artist2,
+                    mood,
+                    genre,
+                    instrument,
+                    bpm,
+                    token,
+                    userId,
+                }),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                throw new Error(errorData.error || 'Failed to fetch recommendations');
+                throw new Error(
+                    errorData.error || 'Failed to fetch recommendations',
+                );
             }
 
             const data = await response.json();
@@ -46,7 +65,10 @@ const InputFields: React.FC = () => {
 
             // Store the playlist ID in localStorage for ResultOptions.tsx
             if (data.playlist && data.playlist.playlistId) {
-                localStorage.setItem('SpotifyPlaylistId', data.playlist.playlistId);
+                localStorage.setItem(
+                    'SpotifyPlaylistId',
+                    data.playlist.playlistId,
+                );
             }
 
             // Update songs with the detailed track information
@@ -77,32 +99,219 @@ const InputFields: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center space-y-4 mt-6">
-            <div className="flex space-x-4">
+        <div className="flex flex-col items-center space-y-4 mt-4 Input-fields">
+            {/* Tabs */}
+            <div className="segmented-control">
                 <input
-                    type="text"
-                    value={artist1}
-                    onChange={e => setArtist1(e.target.value)}
-                    placeholder="Kanye West"
-                    className="border rounded px-4 py-2 w-full max-w-xs"
+                    type="radio"
+                    id="tab-1"
+                    name="tabs"
+                    checked={activeTab === 'Artist to Artist'}
+                    onChange={() => setActiveTab('Artist to Artist')}
                 />
+                <label htmlFor="tab-1">Artist to Artist</label>
+
                 <input
-                    type="text"
-                    value={artist2}
-                    onChange={e => setArtist2(e.target.value)}
-                    placeholder="Taylor Swift"
-                    className="border rounded px-4 py-2 w-full max-w-xs"
+                    type="radio"
+                    id="tab-2"
+                    name="tabs"
+                    checked={activeTab === 'Song to Song'}
+                    onChange={() => setActiveTab('Song to Song')}
                 />
+                <label htmlFor="tab-2">Song to Song</label>
+
+                <input
+                    type="radio"
+                    id="tab-3"
+                    name="tabs"
+                    checked={activeTab === 'Mood'}
+                    onChange={() => setActiveTab('Mood')}
+                />
+                <label htmlFor="tab-3">Mood</label>
+
+                <input
+                    type="radio"
+                    id="tab-4"
+                    name="tabs"
+                    checked={activeTab === 'Instrument'}
+                    onChange={() => setActiveTab('Instrument')}
+                />
+                <label htmlFor="tab-4">Instrument</label>
+
+                <input
+                    type="radio"
+                    id="tab-5"
+                    name="tabs"
+                    checked={activeTab === 'Genre | BPM'}
+                    onChange={() => setActiveTab('Genre | BPM')}
+                />
+                <label htmlFor="tab-5">Genre | BPM</label>
+
+                <div className="segmented-control__indicator" />
             </div>
+
+            <br></br>
+
+            {/* Inputs */}
+            {activeTab === 'Artist to Artist' && (
+                <div className="flex space-x-4 inputs">
+                    <input
+                        type="text"
+                        value={artist1}
+                        onChange={e => setArtist1(e.target.value)}
+                        placeholder="Kanye West"
+                        className="border rounded px-4 py-2 w-full max-w-xs"
+                    />
+                    <input
+                        type="text"
+                        value={artist2}
+                        onChange={e => setArtist2(e.target.value)}
+                        placeholder="Taylor Swift"
+                        className="border rounded px-4 py-2 w-full max-w-xs"
+                    />
+                </div>
+            )}
+
+            {activeTab === 'Song to Song' && (
+                <div className="flex space-x-4 inputs">
+                    <input
+                        type="text"
+                        value={artist1}
+                        onChange={e => setArtist1(e.target.value)}
+                        placeholder="Stairway to Heaven"
+                        className="border rounded px-4 py-2 w-full max-w-xs"
+                    />
+                    <input
+                        type="text"
+                        value={artist2}
+                        onChange={e => setArtist2(e.target.value)}
+                        placeholder="I Need a Dollar"
+                        className="border rounded px-4 py-2 w-full max-w-xs"
+                    />
+                </div>
+            )}
+
+            {activeTab === 'Mood' && (
+                <div className="flex space-x-4 inputs">
+                    <input
+                        type="text"
+                        value={mood}
+                        onChange={e => setMood(e.target.value)}
+                        placeholder="We'll create a playlist based on how you feel.."
+                        className="border rounded px-4 py-2 w-full w-[450px]"
+                    />
+                </div>
+            )}
+
+            {activeTab === 'Instrument' && (
+                <div className="flex space-x-4 inputs">
+                    <input
+                        type="text"
+                        value={artist1}
+                        onChange={e => {
+                            if (e.target.value.length <= 15) {
+                                setArtist1(e.target.value);
+                            }
+                        }}
+                        placeholder="Rap"
+                        maxLength={15}
+                        className="border rounded px-4 py-2 w-full max-w-xs"
+                    />
+
+                    {/* Instrument Dropdown */}
+                    <select
+                        value={instrument}
+                        onChange={e => setInstrument(e.target.value)}
+                        className="border rounded px-4 py-2 w-full max-w-xs"
+                    >
+                        <option value="violin">Violin</option>
+                        <option value="guitar">Guitar</option>
+                        <option value="piano">Piano</option>
+                        <option value="drums">Drums</option>
+                        <option value="bass">Bass</option>
+                        <option value="saxophone">Saxophone</option>
+                        <option value="trumpet">Trumpet</option>
+                        <option value="flute">Flute</option>
+                        <option value="cello">Cello</option>
+                        <option value="clarinet">Clarinet</option>
+                        <option value="keyboard">Keyboard</option>
+                        <option value="harmonica">Harmonica</option>
+                        <option value="ukulele">Ukulele</option>
+                        <option value="banjo">Banjo</option>
+                        <option value="accordion">Accordion</option>
+                        <option value="harp">Harp</option>
+                        <option value="mandolin">Mandolin</option>
+                        <option value="trombone">Trombone</option>
+                        <option value="oboe">Oboe</option>
+                        <option value="tambourine">Tambourine</option>
+                        <option value="bassoon">Bassoon</option>
+                        <option value="synthesizer">Synthesizer</option>
+                        <option value="marimba">Marimba</option>
+                        <option value="congas">Congas</option>
+                        <option value="xylophone">Xylophone</option>
+                    </select>
+                </div>
+            )}
+
+            {activeTab === 'Genre | BPM' && (
+                <div className="flex space-x-4 inputs">
+                    {/* Genre Dropdown */}
+                    <select
+                        value={genre}
+                        onChange={e => setGenre(e.target.value)}
+                        className="border rounded px-4 py-2 w-full max-w-xs"
+                    >
+                        <option value="">Genre</option>
+                        <option value="pop">Pop</option>
+                        <option value="rock">Rock</option>
+                        <option value="jazz">Jazz</option>
+                        <option value="classical">Classical</option>
+                        <option value="hip-hop">Hip-Hop</option>
+                        <option value="electronic">Electronic</option>
+                        <option value="country">Country</option>
+                        <option value="reggae">Reggae</option>
+                        <option value="blues">Blues</option>
+                        <option value="folk">Folk</option>
+                        <option value="metal">Metal</option>
+                        <option value="punk">Punk</option>
+                        <option value="soul">Soul</option>
+                        <option value="rnb">R&B</option>
+                        <option value="latin">Latin</option>
+                        <option value="funk">Funk</option>
+                        <option value="gospel">Gospel</option>
+                        <option value="disco">Disco</option>
+                        <option value="techno">Techno</option>
+                        <option value="house">House</option>
+                        <option value="indie">Indie</option>
+                        <option value="grunge">Grunge</option>
+                        <option value="trap">Trap</option>
+                        <option value="ska">Ska</option>
+                        <option value="ambient">Ambient</option>
+                    </select>
+                    <select
+                        value={bpm}
+                        onChange={e => setBpm(e.target.value)}
+                        className="border rounded px-4 py-2 w-full max-w-xs"
+                    >
+                        <option value="low">Low</option>
+                        <option value="mid">Mid</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+            )}
+
+            <br></br>
+
+            {/* Submit Button */}
             <button
                 onClick={handleClick}
-                className="bg-blue-500 text-white px-4 py-2 rounded"
+                className="px-4 py-2 rounded send-button"
                 disabled={isLoading}
             >
-                {isLoading ? 'Processing...' : 'Send'}
+                {isLoading ? 'Processing...' : 'Create Playlist'}
             </button>
 
-            {error && <div className="text-red-500 mt-4">{error}</div>}
+            {error && <div className="error">{error}</div>}
 
             {/* Pass the songs array to ResultsGrid */}
             <ResultsGrid results={songs} />

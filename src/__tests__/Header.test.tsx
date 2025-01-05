@@ -23,6 +23,6 @@ describe('Header', () => {
         // Find the heading element (h1) and check its text content
         const heading = screen.getByRole('heading', { level: 1 });
         expect(heading).toBeInTheDocument();
-        expect(heading).toHaveTextContent('Playlist - LLM');
+        expect(heading).toHaveTextContent('PLAYLIST');
     });
 });

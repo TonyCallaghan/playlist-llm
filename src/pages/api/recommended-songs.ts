@@ -14,7 +14,7 @@ const openai = new OpenAI({
 
 export default async function handler(
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse,
 ) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method Not Allowed' });
@@ -86,7 +86,9 @@ Format the response as JSON with the following structure:
             const parsedData = JSON.parse(cleanedData);
 
             if (!parsedData.playlist || !Array.isArray(parsedData.playlist)) {
-                throw new Error('Invalid playlist structure received from OpenAI.');
+                throw new Error(
+                    'Invalid playlist structure received from OpenAI.',
+                );
             }
 
             formattedSongs = parsedData.playlist.map((item: any) => ({
@@ -95,7 +97,9 @@ Format the response as JSON with the following structure:
             }));
         } catch (parseError) {
             console.error('Failed to parse songs:', parseError);
-            return res.status(500).json({ error: 'Failed to format the song data. Please try again.' });
+            return res.status(500).json({
+                error: 'Failed to format the song data. Please try again.',
+            });
         }
 
         console.log('Formatted Songs:', formattedSongs);
@@ -120,7 +124,9 @@ Format the response as JSON with the following structure:
 
         if (!spotifyResponse.ok) {
             const errorData = await spotifyResponse.json();
-            throw new Error(errorData.error || 'Failed to create Spotify playlist.');
+            throw new Error(
+                errorData.error || 'Failed to create Spotify playlist.',
+            );
         }
 
         const spotifyData = await spotifyResponse.json();
@@ -132,7 +138,9 @@ Format the response as JSON with the following structure:
     } catch (error: any) {
         console.error('Error in recommended-songs.ts:', error);
         res.status(500).json({
-            error: error.message || 'Failed to generate song recommendations and create Spotify playlist.',
+            error:
+                error.message ||
+                'Failed to generate song recommendations and create Spotify playlist.',
         });
     }
 }
