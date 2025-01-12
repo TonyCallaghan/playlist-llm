@@ -39,6 +39,7 @@ const config: Config = {
 
     // Setup files for additional environment configuration
     setupFilesAfterEnv: ['@testing-library/jest-dom'],
+    testPathIgnorePatterns: ['/node_modules/', 'mockDataFile.ts'],
 };
 
 export default config;
