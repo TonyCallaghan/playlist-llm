@@ -20,7 +20,19 @@ export default async function handler(
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const { activeTab, artist1, artist2, song1, song2, mood, genre, instrument, bpm, token, userId } = req.body;
+    const {
+        activeTab,
+        artist1,
+        artist2,
+        song1,
+        song2,
+        mood,
+        genre,
+        instrument,
+        bpm,
+        token,
+        userId,
+    } = req.body;
 
     let prompt = '';
 
@@ -35,8 +47,7 @@ export default async function handler(
                     1. ${artist1}
                     2. ${artist2}
                     `;
-    }
-    else if (activeTab === 'Song to Song') {
+    } else if (activeTab === 'Song to Song') {
         prompt = `You are a music recommendation engine.
                     I'll provide 2 songs potentially from different genres, your task is to generate a playlist (20 songs) connecting these songs through a progression of songs.
                     Each song in the playlist should represent a logical bridge between the styles of genres of the two artists.
@@ -47,8 +58,7 @@ export default async function handler(
                     1. ${song1}
                     2. ${song2}
                      `;
-    }
-    else if (activeTab === 'Mood') {
+    } else if (activeTab === 'Mood') {
         prompt = `You are a music recommendation engine.
                     I'll provide an input provided by a user, your task is to generate a playlist (20 songs) that really represents this input.
                     The input could be a mood, a feeling or an expression. it could mention an activity or a specific genre or era.
@@ -59,8 +69,7 @@ export default async function handler(
 
                     Only includes songs that correspond to: ${mood}.
                     `;
-    }
-    else if (activeTab === 'Instrument') {
+    } else if (activeTab === 'Instrument') {
         prompt = `You are a music recommendation engine.
                     You will generate a playlist (20 songs) that belongs to a certain genre and features the "${instrument}" instrument throughout within all songs of the playlist.
                     The playlist should only contain songs of that genre. you should try to only include songs that you are certain contain the given instrument.
@@ -70,10 +79,11 @@ export default async function handler(
                     instrument = ${instrument}
                   
                   `;
-    }
-    else if (activeTab === 'Genre | BPM') {
+    } else if (activeTab === 'Genre | BPM') {
         if (!genre) {
-            return res.status(400).json({ error: 'Genre is required for Genre | BPM recommendations.' });
+            return res.status(400).json({
+                error: 'Genre is required for Genre | BPM recommendations.',
+            });
         }
         prompt = `You are a music recommendation engine.
                     Generate a playlist (20 songs) that belongs to a certain genre with a "${bpm}" bpm.
@@ -85,7 +95,6 @@ export default async function handler(
                     
                     `;
     }
-
 
     try {
         const response = await openai.chat.completions.create({
