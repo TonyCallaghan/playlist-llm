@@ -12,6 +12,7 @@ const config: Config = {
         '**/__tests__/**/*.[jt]s?(x)', // Match files in __tests__ folders
         '**/?(*.)+(spec|test).[tj]s?(x)', // Match *.spec.* or *.test.* files
     ],
+    
 
     // Clear mocks between tests to avoid cross-test contamination
     clearMocks: true,
