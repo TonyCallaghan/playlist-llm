@@ -7,6 +7,8 @@ const InputFields: React.FC = () => {
     const [activeTab, setActiveTab] = useState('Mood'); // Default tab is 'Mood'
     const [artist1, setArtist1] = useState('');
     const [artist2, setArtist2] = useState('');
+    const [song1, setSong1] = useState('');
+    const [song2, setSong2] = useState('');
     const [mood, setMood] = useState('');
     const [genre, setGenre] = useState('');
     const [instrument, setInstrument] = useState('');
@@ -19,8 +21,7 @@ const InputFields: React.FC = () => {
 
     const handleLogin = async () => {
         const clientID =
-            process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID ||
-            '2e998fe1e57848b8a0a003bbe111595a'; // Secure this
+            process.env.CLIENT_ID || '2e998fe1e57848b8a0a003bbe111595a'; // Secure this
         const redirectUri = 'http://localhost:3000/callback'; // Update for production
         const scopes = ['user-read-private', 'playlist-modify-public'];
         const authUrl = `https://accounts.spotify.com/authorize?response_type=token&client_id=${clientID}&scope=${encodeURIComponent(scopes.join(' '))}&redirect_uri=${encodeURIComponent(redirectUri)}`;
@@ -44,6 +45,8 @@ const InputFields: React.FC = () => {
                 body: JSON.stringify({
                     artist1,
                     artist2,
+                    song1,
+                    song2,
                     mood,
                     genre,
                     instrument,
@@ -100,7 +103,8 @@ const InputFields: React.FC = () => {
 
     return (
         <div className="flex flex-col items-center space-y-4 mt-4 Input-fields">
-            {/* Tabs */}
+            {/* *** Tabs *** */}
+            {/* Artist to Artist */}
             <div className="segmented-control">
                 <input
                     type="radio"
@@ -111,6 +115,7 @@ const InputFields: React.FC = () => {
                 />
                 <label htmlFor="tab-1">Artist to Artist</label>
 
+                {/* Song to Song */}
                 <input
                     type="radio"
                     id="tab-2"
@@ -120,6 +125,7 @@ const InputFields: React.FC = () => {
                 />
                 <label htmlFor="tab-2">Song to Song</label>
 
+                {/* Based on Mood */}
                 <input
                     type="radio"
                     id="tab-3"
@@ -129,6 +135,7 @@ const InputFields: React.FC = () => {
                 />
                 <label htmlFor="tab-3">Mood</label>
 
+                {/* Instrument */}
                 <input
                     type="radio"
                     id="tab-4"
@@ -138,6 +145,7 @@ const InputFields: React.FC = () => {
                 />
                 <label htmlFor="tab-4">Instrument</label>
 
+                {/* Genre with BPM  */}
                 <input
                     type="radio"
                     id="tab-5"
@@ -152,7 +160,7 @@ const InputFields: React.FC = () => {
 
             <br></br>
 
-            {/* Inputs */}
+            {/* Artist to Artist | input & Placeholders */}
             {activeTab === 'Artist to Artist' && (
                 <div className="flex space-x-4 inputs">
                     <input
@@ -160,6 +168,7 @@ const InputFields: React.FC = () => {
                         value={artist1}
                         onChange={e => setArtist1(e.target.value)}
                         placeholder="Kanye West"
+                        maxLength={20}
                         className="border rounded px-4 py-2 w-full max-w-xs"
                     />
                     <input
@@ -167,30 +176,35 @@ const InputFields: React.FC = () => {
                         value={artist2}
                         onChange={e => setArtist2(e.target.value)}
                         placeholder="Taylor Swift"
+                        maxLength={20}
                         className="border rounded px-4 py-2 w-full max-w-xs"
                     />
                 </div>
             )}
 
+            {/* Song to Song | input & Placeholders */}
             {activeTab === 'Song to Song' && (
                 <div className="flex space-x-4 inputs">
                     <input
                         type="text"
-                        value={artist1}
-                        onChange={e => setArtist1(e.target.value)}
+                        value={song1}
+                        onChange={e => setSong1(e.target.value)}
                         placeholder="Stairway to Heaven"
+                        maxLength={25}
                         className="border rounded px-4 py-2 w-full max-w-xs"
                     />
                     <input
                         type="text"
-                        value={artist2}
-                        onChange={e => setArtist2(e.target.value)}
+                        value={song2}
+                        onChange={e => setSong2(e.target.value)}
                         placeholder="I Need a Dollar"
+                        maxLength={25}
                         className="border rounded px-4 py-2 w-full max-w-xs"
                     />
                 </div>
             )}
 
+            {/* Mood | input & Placeholders */}
             {activeTab === 'Mood' && (
                 <div className="flex space-x-4 inputs">
                     <input
@@ -198,22 +212,20 @@ const InputFields: React.FC = () => {
                         value={mood}
                         onChange={e => setMood(e.target.value)}
                         placeholder="We'll create a playlist based on how you feel.."
-                        className="border rounded px-4 py-2 w-full w-[450px]"
+                        maxLength={45}
+                        className="border rounded px-4 py-2 w-[500px]"
                     />
                 </div>
             )}
 
+            {/* Instrument | input & Placeholders */}
             {activeTab === 'Instrument' && (
                 <div className="flex space-x-4 inputs">
                     <input
                         type="text"
-                        value={artist1}
-                        onChange={e => {
-                            if (e.target.value.length <= 15) {
-                                setArtist1(e.target.value);
-                            }
-                        }}
-                        placeholder="Rap"
+                        value={genre}
+                        onChange={e => setGenre(e.target.value)}
+                        placeholder="Genre | Artist | Any"
                         maxLength={15}
                         className="border rounded px-4 py-2 w-full max-w-xs"
                     />
@@ -253,6 +265,7 @@ const InputFields: React.FC = () => {
                 </div>
             )}
 
+            {/* Genre & BPM | input & Placeholders */}
             {activeTab === 'Genre | BPM' && (
                 <div className="flex space-x-4 inputs">
                     {/* Genre Dropdown */}
@@ -313,11 +326,13 @@ const InputFields: React.FC = () => {
 
             {error && <div className="error">{error}</div>}
 
-            {/* Pass the songs array to ResultsGrid */}
+            {/* ResultOptions + ResultsGrid added after input has been processed */}
+            {songs.length > 0 && <ResultOptions setSongs={setSongs} />}
+
+            {/* Pass the songs array to ResultsGrid*/}
             <ResultsGrid results={songs} />
 
-            {/* Include ResultOptions component */}
-            {songs.length > 0 && <ResultOptions />}
+            <br></br>
         </div>
     );
 };

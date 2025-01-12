@@ -1,3 +1,6 @@
+/* Styling for the Header */
+
+/* Boxes */
 .box {
     display: flex;
     justify-content: center;
@@ -16,30 +19,27 @@
     height: 9rem;
 }
 
+/* "PLAYLIST"*/
 .title-text {
     font-size: 4rem;
-    font-weight: 800; /* Extra-bold weight for a strong look */
-    display: inline-block; /* Ensure it behaves like a block-level element */
-    animation: gradient-move 3s infinite; /* Optional: Animate the gradient */
+    font-weight: 800;
+    display: inline-block;
+    animation: gradient-move 3s infinite;
+    position: relative;
 }
 
+/* "LLM" Gradient */
 .title-text span {
-    background: linear-gradient(
-        90deg,
-        #6d5dfc,
-        #5b0eeb
-    ); /* Gradient for a modern look */
-    -webkit-background-clip: text; /* Clip gradient to the text */
-    -webkit-text-fill-color: transparent; /* Make the gradient visible */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for depth */
+    background: linear-gradient(90deg, #6d5dfc, #5b0eeb);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.title-text {
-    position: relative; /* Needed for the ::after pseudo-element */
-}
-
+/* Creates the underline hover*/
 .title-text::after {
-    content: ''; /* Creates the underline */
+    content: '';
     position: absolute;
     left: 0;
     bottom: -4px;
@@ -56,6 +56,7 @@
     transform: scaleX(1);
 }
 
+/* "A Spotify playlist generator leveraging the power of AI." */
 .subtitle-text span {
     position: relative;
 }
@@ -78,6 +79,7 @@
     transform: scaleX(1);
 }
 
+/* Hover Animation */
 @keyframes gradient-move {
     0% {
         background-position: 0% 50%;

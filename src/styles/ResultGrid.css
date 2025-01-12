@@ -1,0 +1,16 @@
+/* Styling for song cards */
+.result-artwork {
+    border-radius: 30px;
+    box-shadow:
+        4px 4px 8px var(--greyLight-2),
+        -2px -1px 10px var(--white);
+    padding: 12px;
+}
+
+/* Hover effect */
+.result-artwork:hover {
+    outline: none;
+    box-shadow: var(--inner-shadow);
+    transition: all 0.5s ease;
+    /* background-color: var(--primary-dark); */
+}

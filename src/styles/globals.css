@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Color palette */
 :root {
     --primary-light: #8abdff;
     --primary: #6d5dfc;
@@ -20,12 +21,15 @@
         inset -0.2rem -0.2rem 0.5rem var(--white);
 }
 
+/* Overall styling */
 body {
     font-family: 'Montserrat', sans-serif;
 }
 
 html {
-    font-size: 16px; /* Set this to match your design */
+    font-size: 16px;
+    box-sizing: border-box;
+    background: var(--greyLight-1);
 }
 
 ::selection {

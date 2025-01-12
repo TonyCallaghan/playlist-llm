@@ -31,7 +31,7 @@ export default async function handler(
     try {
         // Step 1: Generate Song Recommendations with OpenAI
         const response = await openai.chat.completions.create({
-            model: 'gpt-4', // Corrected model name
+            model: 'gpt-3.5-turbo',
             messages: [
                 {
                     role: 'user',
@@ -45,11 +45,13 @@ Based on the following two artists:
 1. ${artist1}
 2. ${artist2}
 
-Provide 20 songs. 
+Provide 15 songs. 
 
 For each song, include:
 - The song's name
 - The artist's name
+
+- Do NOT include feat or featuring artists.
 
 Format the response as JSON with the following structure:
 {
@@ -64,7 +66,7 @@ Format the response as JSON with the following structure:
                 },
             ],
             max_tokens: 1000,
-            temperature: 0.4,
+            temperature: 0.1,
             top_p: 0.2,
         });
 
@@ -80,6 +82,7 @@ Format the response as JSON with the following structure:
         let formattedSongs: Song[] = [];
         try {
             const cleanedData = songsContent
+                .toLowerCase()
                 .replace(/```json|```/g, '') // Remove Markdown code block indicators if any
                 .trim(); // Remove any leading or trailing whitespace
 
