@@ -12,6 +12,7 @@ const config: Config = {
         '**/__tests__/**/*.[jt]s?(x)', // Match files in __tests__ folders
         '**/?(*.)+(spec|test).[tj]s?(x)', // Match *.spec.* or *.test.* files
     ],
+    
 
     // Clear mocks between tests to avoid cross-test contamination
     clearMocks: true,
@@ -39,6 +40,7 @@ const config: Config = {
 
     // Setup files for additional environment configuration
     setupFilesAfterEnv: ['@testing-library/jest-dom'],
+    "testPathIgnorePatterns": ["/node_modules/", "mockDataFile.ts"]
 };
 
 export default config;
