@@ -1,5 +1,11 @@
 # Playlist-LLM
 
+https://github.com/user-attachments/assets/824b7bff-520e-47e8-a9c5-35069b3e78f3
+
+
+
+
+
 -   This README file will be edited before submission.
 -   Some instructions below (Taken from Ostanify project 😉)
 -   [Next.js](https://nextjs.org) project using TypeScript + React.
