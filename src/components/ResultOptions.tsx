@@ -11,15 +11,18 @@ interface ResultOptionsProps {
 
 const ResultOptions: React.FC<ResultOptionsProps> = ({ setSongs }) => {
     const [showCopiedPopup, setShowCopiedPopup] = useState(false);
+    // 3 Button's functionality
 
+    // Reset and logout of Spotify
     const handleResetTokens = () => {
         localStorage.removeItem('spotifyAuthToken');
         localStorage.removeItem('spotifyTokenExpiration');
         localStorage.removeItem('SpotifyPlaylistId');
-        setSongs([]);
+        setSongs([]); // Removes results from the grid
         console.log('Tokens and Playlist ID have been reset!!');
     };
 
+    // Open the Spotify Playlist button
     const openPlaylist = () => {
         const playlistID = localStorage.getItem('SpotifyPlaylistId');
         console.log('Retrieved Playlist ID:', playlistID);
@@ -32,6 +35,7 @@ const ResultOptions: React.FC<ResultOptionsProps> = ({ setSongs }) => {
         }
     };
 
+    // Share button
     const copyPlaylistLink = () => {
         const playlistID = localStorage.getItem('SpotifyPlaylistId');
         console.log('Retrieved Playlist ID:', playlistID);
